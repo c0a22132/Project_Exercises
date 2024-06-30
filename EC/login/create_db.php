@@ -1,5 +1,5 @@
 <?php
-// データベースファイルのパス
+// データベースファイルのパスです
 $dbPath = 'path_to_your_database/your_database_name.sqlite';
 
 try {
