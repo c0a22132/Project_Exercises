@@ -13,11 +13,17 @@
         function populateAddress() {
             // AjaxZip3のライブラリを使って郵便番号から住所を取得
             AjaxZip3.zip2addr('zipcode', '', 'prefecture', 'city');
-
             // Materializeのテキストフィールドを更新
             setTimeout(function() {
                 M.updateTextFields(); // Materialize CSSのテキストフィールドを更新
-            }, 100); // #FIX#少し遅延を入れることで、AjaxZip3による住所の自動入力が完了してから実行されるようにする
+                // 都道府県が入力されたらラベルを非表示にする
+                const prefectureLabel = document.querySelector('label[for="prefecture"]');
+                if (document.getElementById('prefecture').value) {
+                    prefectureLabel.classList.add('active'); // ラベルをアクティブ状態にする
+                } else {
+                    prefectureLabel.classList.remove('active');
+                }
+            }, 100); // 少し遅延を入れる
         }
 
         // メールアドレスのバリデーション
