@@ -2,10 +2,6 @@
 session_start();
 require 'database_config.php'; // データベース接続情報を含むファイル
 
-
-//サイトのアドレスを変数化
-$site_url = "http://localhost/EC/login/";
-
 // POSTデータを受け取る
 $lastName = $_POST['last_name'] ?? '';
 $firstName = $_POST['first_name'] ?? '';
@@ -42,27 +38,47 @@ try {
     // ユーザー登録後の処理
     $userId = $pdo->lastInsertId(); // 最後に挿入された行のIDを取得
 
-    // 確認トークンを生成
-    $token = bin2hex(random_bytes(16));
-
-    // トークンをデータベースに保存
-    $sql = "INSERT INTO user_verification (user_id, token) VALUES (?, ?)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$userId, $token]);
-
     // 確認メールを送信
-    $to = $email;
     $subject = 'アカウントの確認';
-    $message = "以下のリンクをクリックしてアカウントを確認してください:\n\n$site_url/verify.php?token=$token";
-    $headers = 'From: noreply@yourwebsite.com' . "\r\n" .
-        'Reply-To: noreply@yourwebsite.com' . "\r\n" .
-        'X-Mailer: PHP/' . phpversion();
+    // 入力された情報の確認メールを送信
+    $message = "以下の情報で登録しました。\n\n";
+    $message .= "氏名: {$lastName} {$firstName}\n";
+    $message .= "メールアドレス: {$email}\n\n";
 
-    mail($to, $subject, $message, $headers);
+    $headers = array(
+        'From' => 'test@test',
+        'Reply-To' => 'test@test',
+        'X-Mailer' => 'PHP/' . phpversion()
+    );
+    mail($email, $subject, $message, $headers);
 
-    // 完了メッセージ
-    echo '登録が完了しました。';
+    // 完了メッセージを変数に格納
+    $output = '登録が完了しました。';
 } catch (PDOException $e) {
     die('データベースエラー: ' . $e->getMessage());
 }
 ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!--$outputに格納されたメッセージを表示-->
+    <title>登録</title>
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center">登録完了</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <p class="flow-text"><?php echo $output; ?></p>
+                <!--メインページへのリンク-->
+                <button onclick="location.href='../index.php'">メインページへ</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -2,8 +2,10 @@
 // database_config.phpからデータベース接続設定
 require 'database_config.php';
 
-// クエリパラメータからトークンを取得
+// クエリパラメータからトークンを取得「/verify.php?$token」でユーザーは受け取る
 $token = $_GET['token'] ?? '';
+
+$message = '';
 
 if (!empty($token)) {
     // トークンを検証
@@ -23,11 +25,22 @@ if (!empty($token)) {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$token]);
 
-        echo 'アカウントが正常に有効化されました。';
+        $message = 'アカウントが正常に有効化されました。';
     } else {
-        echo '無効なトークンです。';
+        $message = '無効なトークンです。';
     }
 } else {
-    echo 'トークンが提供されていません。';
+    $message = 'トークンが提供されていません。';
 }
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>アカウント有効化</title>
+</head>
+<body>
+    <h1>アカウント有効化</h1>
+    <p><?php echo $message; ?></p>
+</body>
+</html>
