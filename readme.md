@@ -14,4 +14,20 @@
 │   ├── ... (商品の画像ファイル)
 │   └── ... (その他の画像ファイル)
 └── ... (その他のページ)
+CREATE TABLE users (
+    user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    last_name VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    birthday DATE NOT NULL,
+    address VARCHAR(255),
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL
+);
+CREATE TABLE user_verification (
+    verification_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
 ```

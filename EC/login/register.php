@@ -32,11 +32,12 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // SQL文を準備
-    $sql = "INSERT INTO users (last_name, first_name, birthday, zipcode, prefecture, city, street, email, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $address = $zipcode . ' ' . $prefecture . ' ' . $city . ' ' . $street;
+    $sql = "INSERT INTO users (last_name, first_name, birthday, address, email, password_hash) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($sql);
 
     // SQL文を実行
-    $stmt->execute([$lastName, $firstName, $birthday, $zipcode, $prefecture, $city, $street, $email, $passwordHash]);
+    $stmt->execute([$lastName, $firstName, $birthday, $address, $email, $passwordHash]);
 
     // ユーザー登録後の処理
     $userId = $pdo->lastInsertId(); // 最後に挿入された行のIDを取得
