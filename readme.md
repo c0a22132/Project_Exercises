@@ -33,6 +33,23 @@ CREATE TABLE user_verification (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+
+商品用データベースはproducts 画像は3つまでで
+USE product_db;
+
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    description TEXT NOT NULL,
+    stock INT NOT NULL,
+    image1 VARCHAR(255),
+    image2 VARCHAR(255),
+    image3 VARCHAR(255)
+);
+INSERT INTO products (name, price, description, stock, image1, image2, image3)
+VALUES ('商品名', 1990, '商品説明', 10, 'merchandise1.jpg', 'merchandise2.jpg', 'merchandise3.png')
+
 --------------------
 TODO
 --------------------
