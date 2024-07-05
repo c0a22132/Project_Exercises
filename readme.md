@@ -14,6 +14,9 @@
 │   ├── ... (商品の画像ファイル)
 │   └── ... (その他の画像ファイル)
 └── ... (その他のページ)
+
+データベース名はecdatabese
+
 CREATE TABLE users (
     user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
     last_name VARCHAR(255) NOT NULL,
@@ -23,7 +26,6 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL
 );
-<<以下廃止>>
 CREATE TABLE user_verification (
     verification_id INTEGER AUTO_INCREMENT PRIMARY KEY,
     user_id INTEGER NOT NULL,
@@ -31,4 +33,13 @@ CREATE TABLE user_verification (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+--------------------
+TODO
+--------------------
+□検索バー
+□ページとデータベース
+□レビュー
+□カード情報
+□ポイント
+--------------------
 ```
