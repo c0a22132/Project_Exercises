@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>商品詳細</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .thumbnail-container {
+            float: left;
+            width: 20%;
+        }
+        .main-image-container {
+            float: left;
+            width: 40%; /* 幅を調整して隣にスペースを作る */
+            text-align: center;
+        }
+        .thumbnail-container img {
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .Product-Description {
+            float: left; /* 右からではなく、左からの流れにする */
+            width: 40%; /* 幅を調整 */
+            margin-left: 2%; /* main-image-containerとの間隔を調整 */
+            /* 移動 */
+            margin-top: -40%;
+        }
+        /* 追加 */
+        .btn.waves-effect.waves-light {
+            background-color: red;
+            /* border-radius: 20px; */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="nav-wrapper">
+            <a href="#" class="brand-logo">商品詳細</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="main.html" class="waves-effect waves-light btn">ショッピングへ戻る</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h2>商品詳細</h2>
+        <!--横に線を引く-->
+        <hr>
+        <div class="thumbnail-container">
+            <img src="merchandise1.jpg" alt="商品画像1" onclick="changeMainImage('./merchandise1.jpg')">
+            <img src="merchandise2.jpg" alt="商品画像2" onclick="changeMainImage('./merchandise2.jpg')">
+            <img src="merchandise3.png" alt="商品画像3" onclick="changeMainImage('./merchandise3.png')">
+            <style>
+                .thumbnail-container img {
+                    cursor: pointer; /* カーソルをポインターに変更 */
+                    width: 50%; /* 画像の横幅を100%に設定 */
+                    margin-bottom: 10px; /* 画像と画像の間に10pxの余白を設定 */
+                }
+            </style>
+        </div>
+        <div class="main-image-container">
+            <img id="main-image" src="img/merchandise/merchandise1.jpg" alt="商品画像">
+            <style>
+                .main-image-container img {
+                    max-width: 90%; /* 画像の最大横幅を48%に設定 */
+                    /*位置をcontainerの右側に設定*/
+                    margin-right: 60%;
+                }
+            </style>
+        </div>
+        <!--画像の右側に商品説明-->
+        <div class="Product-Description">
+            <h3>商品名</h3>
+            <hr>
+            <h4>価格:1990円
+                <style>
+                    /*価格の文字を赤くする*/
+                    h4 {
+                        color: red;
+                    }
+                </style>
+            </h4>
+            <hr>
+            <p>商品説明：商品説明ぐああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ
+            </p>
+            <hr>
+            <p>在庫数：在庫数</p>
+            <hr>
+            <!--購入用UI-->
+            <form action="cart.php" method="post">
+                <!--materializeを利用したボタン-->
+                <button class="btn waves-effect waves-light" type="submit" name="action">カートに追加
+                    <i class="material-icons right"></i>
+                </button>
+            </form>
+
+            <style>
+                /*Product-Descriptionをmain-image-containerの右隣に設置*/
+                .Product-Description {
+                    float: right;
+                    width: 40%;
+                    margin-left: 10%;
+                }
+
+                /*商品説明の文字を左寄せにする*/
+                .Product-Description p {
+                    text-align: left;
+                }
+
+                /*商品名の文字を左寄せにする*/
+                .Product-Description h3 {
+                    text-align: left;
+                }
+
+                /*価格の文字を左寄せにする*/
+            </style>
+        </div>
+        <!--レビューを配置、レビューは星のグラフと記入できるようにする-->
+        <div class="Review">
+            <h3>レビュー</h3>
+            <hr>
+            <p>星の数</p>
+            <hr>
+            <p>レビュー</p>
+            <hr>
+            <!--レビュー作成ページへ-->
+            <form action="review.php" method="post">
+                <!--materializeを利用したボタン-->
+                <button class="btn waves-effect waves-light" type="submit" name="action">
+                    <a href="review.html" style="color: white; text-decoration: none;">レビューを書く</a>
+                    <i class="material-icons right"></i>
+                </button>
+            </form>
+
+            <style>
+                /*レビューを右側に配置*/
+                .Review {
+                    float: right;
+                    width: 40%;
+                    margin-left: 10%;
+                }
+
+                /*星の数の文字を左寄せにする*/
+                .Review p {
+                    text-align: left;
+                }
+
+                /*レビューの文字を左寄せにする*/
+                .Review p {
+                    text-align: left;
+                }
+            </style>
+        
+        </div>
+        
+    </div>
+    <script>
+
+        function changeMainImage(src) {
+            document.getElementById('main-image').src = src;
+        }
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            // thumbnail-containerクラスを持つ要素の中から最初のimg要素を取得
+            var firstThumbnail = document.querySelector(".thumbnail-container img:first-child");
+            // firstThumbnailが存在する場合、何らかの操作を行う
+            if (firstThumbnail) {
+                // 例: firstThumbnailをアクティブな状態にする処理
+                firstThumbnail.classList.add("active");
+                // デフォルトで最初のサムネイル画像を表示する
+                changeMainImage(firstThumbnail.src);
+            }
+        });
+    </script>
+    <!-- Materialize JSの読み込み -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
