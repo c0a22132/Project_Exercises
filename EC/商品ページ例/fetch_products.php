@@ -1,8 +1,11 @@
 <?php
-require '../login/database_config.php'; // database_config.php を読み込む
+$servername = "localhost";
+$username = "user1";
+$password = "passwordA1!";
+$dbname = "ecdatabese";
 
 // Create connection
-$conn = new mysqli(parse_url(DSN)['host'], DB_USER, DB_PASS, substr(parse_url(DSN)['path'], 1));
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
