@@ -34,7 +34,9 @@ CREATE TABLE user_verification (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-商品用データベースはproducts 画像は3つまでで
+商品ページはmerchandise.html?id=x(x)はテーブル内のアドレスで表示できる
+
+商品用データベースはproducts 画像は3つまでで 自動で作成されるので入力の必要はなし
 USE product_db;
 
 CREATE TABLE products (
