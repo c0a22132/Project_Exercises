@@ -48,7 +48,7 @@ if (!empty($query)) {
 					<div class="col s12 m4">
 						<div class="card">
 							<div class="card-image">
-								<img src="<?php echo htmlspecialchars($uploadDir $product['image1']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+								<img src="<?php echo htmlspecialchars($uploadDir . $product['image1']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
 							</div>
 							<span class="card-title"><?php echo htmlspecialchars($product['name']); ?></span>
 							<div class="card-content">
