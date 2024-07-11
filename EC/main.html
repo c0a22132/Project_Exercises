@@ -34,32 +34,90 @@
                 <button type="submit" class="waves-effect waves-light btn">検索</button>
             </form>
 
-            <!-- Display dynamic product cards -->
-            <div class="row">
-                <?php
-                // Include database connection configuration
-                require './login/database_config.php';
+            <!-- Recommendation Carousel -->
+            <div class="carousel carousel-slider center">
+                <div class="carousel-item red white-text" href="#one!">
+                    <h2>1</h2>
+                    <p class="white-text">カーセル1</p>
+                </div>
+                <div class="carousel-item amber white-text" href="#two!">
+                    <h2>2</h2>
+                    <p class="white-text">カーセル2</p>
+                </div>
+                <div class="carousel-item green white-text" href="#three!">
+                    <h2>3</h2>
+                    <p class="white-text">カーセル3</p>
+                </div>
+                <div class="carousel-item blue white-text" href="#four!">
+                    <h2>4</h2>
+                    <p class="white-text">カーセル4</p>
+                </div>
+            </div>
 
-                // Fetch products from the database
-                $pdo = new PDO(DSN, DB_USER, DB_PASS);
-                $stmt = $pdo->query("SELECT * FROM products LIMIT 4"); // Limit to 4 products for example
-                while ($product = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    echo '<div class="col s4">';
-                    echo '<div class="card">';
-                    echo '<div class="card-image">';
-                    echo '<img src="' . htmlspecialchars($uploadDir . $product['image1'], ENT_QUOTES, 'UTF-8') . '" alt="' . htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') . '">';
-                    echo '</div>';
-                    echo '<span class="card-title">' . htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') . '</span>';
-                    echo '<div class="card-content">';
-                    echo '<p>' . htmlspecialchars($product['description'], ENT_QUOTES, 'UTF-8') . '</p>';
-                    echo '</div>';
-                    echo '<div class="card-action">';
-                    echo '<a href="' . htmlspecialchars($merchandise . '?id=' . $product['product_id']) . '">詳細を見る</a>';
-                    echo '</div>';
-                    echo '</div>';
-                    echo '</div>';
-                }
-                ?>
+            <div class="row">
+                <!-- Card 1 -->
+                <div class="col s4">
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="./image1.jpg" alt="Product 1">
+                        </div>
+                        <span class="card-title">Product 1</span>
+                        <div class="card-content">
+                            This is a featured product.
+                        </div>
+                        <div class="card-action">
+                            <a href="./Shopping/card1.html">More Info</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="col s4">
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="./image1.jpg" alt="Product 2">
+                        </div>
+                        <span class="card-title">Product 2</span>
+                        <div class="card-content">
+                            This is another featured product.
+                        </div>
+                        <div class="card-action">
+                            <a href="#">More Info</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="col s4">
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="./image1.jpg" alt="Product 3">
+                        </div>
+                        <span class="card-title">Product 3</span>
+                        <div class="card-content">
+                            This is yet another featured product.
+                        </div>
+                        <div class="card-action">
+                            <a href="#">More Info</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Card 4 -->
+                <div class="col s4">
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="./image1.jpg" alt="Product 4">
+                        </div>
+                        <span class="card-title">Product 4</span>
+                        <div class="card-content">
+                            This is a new featured product.
+                        </div>
+                        <div class="card-action">
+                            <a href="#">More Info</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 追加のカードはここに続けて追加できます -->
             </div>
         </div>
     </main>
@@ -82,15 +140,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var elems = document.querySelectorAll('.carousel') || [];
-            var instances = M.Carousel.init(elems || [], {
+            var elems = document.querySelectorAll('.carousel');
+            var instances = M.Carousel.init(elems, {
                 fullWidth: true,
                 indicators: true
             });
 
             // 自動スクロール機能
             setInterval(function() {
-                var instance = M.Carousel.getInstance(elems[0] || null); // 最初のカーセルインスタンスを取得
+                var instance = M.Carousel.getInstance(elems[0]); // 最初のカーセルインスタンスを取得
                 instance.next(); // 次のスライドへ移動
             }, 5000); // 5秒ごとに実行
         });
