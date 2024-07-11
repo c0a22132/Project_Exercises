@@ -4,7 +4,7 @@ ini_set('display_errors', "On");
 error_reporting(E_ALL);
 
 // データベース接続情報を含むファイルを読み込む
-require '../login/database_config.php';
+require './login/database_config.php';
 
 // データベース接続
 $pdo = new PDO(DSN, DB_USER, DB_PASS);
