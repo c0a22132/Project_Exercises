@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 $servername = "localhost";
 $username = "user1";
 $password = "passwordA1!";
-$dbname = "ecdatabese"; // Corrected typo from ecdatabese to ecdatabase
+$dbname = "ecdatabese";
 
 // 画像フォルダーのパス
 $imagePath = '商品ページ例/';

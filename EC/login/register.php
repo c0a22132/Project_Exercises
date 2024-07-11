@@ -1,6 +1,41 @@
+user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+user_id INTEGER,
+user_id INTEGER,
+
 <?php
 session_start();
 require 'database_config.php'; // データベース接続情報を含むファイル
+
+// データベース接続
+$pdo = new PDO(DSN, DB_USER, DB_PASS);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// ユーザーテーブル作成
+$createUsersTable = "CREATE TABLE IF NOT EXISTS users (
+    last_name VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    birthday DATE NOT NULL,
+    address VARCHAR(255),
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL
+)";
+$pdo->exec($createUsersTable);
+
+// タグテーブル作成
+$createTagsTable = "CREATE TABLE IF NOT EXISTS tags (
+    tag_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    tag VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+)";
+$pdo->exec($createTagsTable);
+
+// 指紋テーブル作成
+$createFingerprintsTable = "CREATE TABLE IF NOT EXISTS fingerprints (
+    fingerprint_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    fingerprint VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+)";
+$pdo->exec($createFingerprintsTable);
 
 // POSTデータを受け取る
 $lastName = $_POST['last_name'] ?? '';
@@ -23,10 +58,6 @@ if (empty($lastName) || empty($firstName) || empty($email) || empty($password)) 
 $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
 try {
-    // データベース接続
-    $pdo = new PDO(DSN, DB_USER, DB_PASS);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
     // SQL文を準備
     $address = $zipcode . ' ' . $prefecture . ' ' . $city . ' ' . $street;
     $sql = "INSERT INTO users (last_name, first_name, birthday, address, email, password_hash) VALUES (?, ?, ?, ?, ?, ?)";
