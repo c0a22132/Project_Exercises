@@ -1,8 +1,4 @@
 <?php
-//errorを表示
-ini_set('display_errors', "On");
-error_reporting(E_ALL);
-//データベース接続情報を含むファイル
 session_start();
 require '../login/database_config.php'; // データベース接続情報を含むファイル
 
@@ -11,7 +7,7 @@ $pdo = new PDO(DSN, DB_USER, DB_PASS);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // データベースが存在しない場合に作成し、そのデータベースを使用
-$dbname = 'my_database';
+$dbname = 'ecdatabase';
 $pdo->exec("CREATE DATABASE IF NOT EXISTS $dbname");
 $pdo->exec("USE $dbname");
 
