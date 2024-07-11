@@ -8,6 +8,8 @@ $servername = "localhost";
 $username = "user1";
 $password = "passwordA1!";
 $dbname = "ecdatabese";
+//画像フォルダーのパス
+$imagePath = '商品ページ例/';
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -51,7 +53,7 @@ $conn->close();
                     <div class="col s4">
                         <div class="card">
                             <div class="card-image">
-                                <img src="<?php echo htmlspecialchars($product['image1']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                                <img src="<?php echo htmlspecialchars($imagePath/$product['image1']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
                             </div>
                             <span class="card-title"><?php echo htmlspecialchars($product['name']); ?></span>
                             <div class="card-content">
