@@ -1,6 +1,4 @@
-user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
-user_id INTEGER,
-user_id INTEGER,
+user_id INTEGER NOT NULL,
 
 <?php
 session_start();
@@ -36,6 +34,15 @@ $createFingerprintsTable = "CREATE TABLE IF NOT EXISTS fingerprints (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 )";
 $pdo->exec($createFingerprintsTable);
+
+// ユーザー確認テーブル作成
+$createUserVerificationTable = "CREATE TABLE IF NOT EXISTS user_verification (
+    verification_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+)";
+$pdo->exec($createUserVerificationTable);
 
 // POSTデータを受け取る
 $lastName = $_POST['last_name'] ?? '';
