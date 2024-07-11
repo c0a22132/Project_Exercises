@@ -1,5 +1,5 @@
 <?php
-//エラーを表示
+// エラーを表示
 ini_set('display_errors', "On");
 error_reporting(E_ALL);
 session_start();
@@ -54,13 +54,13 @@ if (empty($name) || empty($price) || empty($description) || empty($stock)) {
 
 try {
     // 画像をアップロード
-    $uploadDir = './uploads/';
+    $uploadDir = '/uploads/';
     $uploadedImage1 = $uploadDir . basename($_FILES['image1']['name']);
     $uploadedImage2 = $uploadDir . basename($_FILES['image2']['name']);
     $uploadedImage3 = $uploadDir . basename($_FILES['image3']['name']);
-    move_uploaded_file($_FILES['image1']['tmp_name'], $uploadedImage1);
-    move_uploaded_file($_FILES['image2']['tmp_name'], $uploadedImage2);
-    move_uploaded_file($_FILES['image3']['tmp_name'], $uploadedImage3);
+    move_uploaded_file($_FILES['image1']['tmp_name'], './' . $uploadedImage1);
+    move_uploaded_file($_FILES['image2']['tmp_name'], './' . $uploadedImage2);
+    move_uploaded_file($_FILES['image3']['tmp_name'], './' . $uploadedImage3);
 
     // SQL文を準備
     $sql = "INSERT INTO products (name, price, description, stock, image1, image2, image3) VALUES (?, ?, ?, ?, ?, ?, ?)";
