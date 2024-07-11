@@ -6,9 +6,10 @@ require 'database_config.php'; // データベース接続情報を含むファ�
 $pdo = new PDO(DSN, DB_USER, DB_PASS);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// データベースが存在しない場合に作成
-$pdo->exec("CREATE DATABASE IF NOT EXISTS my_database");
-$pdo->exec("USE my_database");
+// データベースが存在しない場合に作成し、そのデータベースを使用
+$dbname = 'my_database';
+$pdo->exec("CREATE DATABASE IF NOT EXISTS $dbname");
+$pdo->exec("USE $dbname");
 
 // ユーザーテーブル作成
 $createUsersTable = "CREATE TABLE IF NOT EXISTS users (
