@@ -1,39 +1,66 @@
 <?php
-// Enable error reporting for debugging purposes
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+// エラーを表示
+ini_set('display_errors', "On");
 error_reporting(E_ALL);
 
-$servername = "localhost";
-$username = "user1";
-$password = "passwordA1!";
-$dbname = "ecdatabase";
+// データベース接続情報を含むファイルを読み込む
+require '../login/database_config.php';
 
-// 画像フォルダーのパス
-$imagePath = '商品ページ例/';
+// データベース接続
+$pdo = new PDO(DSN, DB_USER, DB_PASS);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+// 検索クエリを取得
+$query = $_GET['query'] ?? '';
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// 検索クエリが空でない場合、データベースから商品情報を検索
+if (!empty($query)) {
+	$sql = "SELECT * FROM products WHERE name LIKE :query OR description LIKE :query";
+	$stmt = $pdo->prepare($sql);
+	$stmt->bindValue(':query', '%' . $query . '%');
+	$stmt->execute();
+	$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+	$products = [];
 }
 
-$query = isset($_GET['query']) ? $conn->real_escape_string($_GET['query']) : '';
-
-$sql = "SELECT product_id, name, price, description, stock, image1, image2, image3 FROM products WHERE name LIKE ? OR description LIKE ?";
-$stmt = $conn->prepare($sql);
-$searchQuery = '%' . $query . '%';
-$stmt->bind_param("ss", $searchQuery, $searchQuery);
-$stmt->execute();
-$result = $stmt->get_result();
-
-$products = [];
-while ($row = $result->fetch_assoc()) {
-    $products[] = $row;
-}
-
-$stmt->close();
-$conn->close();
+// HTMLで検索結果を表示
 ?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>検索結果</title>
+	<!-- Materialize CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+	<div class="container">
+		<h2>検索結果</h2>
+		<?php if (empty($products)): ?>
+			<p>商品が見つかりませんでした。</p>
+		<?php else: ?>
+			<div class="row">
+				<?php foreach ($products as $product): ?>
+					<div class="col s12 m4">
+						<div class="card">
+							<div class="card-image">
+								<img src="<?php echo htmlspecialchars($product['image1']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+							</div>
+							<span class="card-title"><?php echo htmlspecialchars($product['name']); ?></span>
+							<div class="card-content">
+								<p><?php echo htmlspecialchars($product['description']); ?></p>
+							</div>
+							<div class="card-action">
+								<a href="#">詳細を見る</a>
+							</div>
+						</div>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		<?php endif; ?>
+	</div>
+	<!-- Materialize JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
