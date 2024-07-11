@@ -12,6 +12,8 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 //画像のアップロード先ディレクトリ
 $uploadDir = './商品ページ例';
+//商品ページ
+$merchandise = './商品ページ例/merchandise.html';
 
 // 検索クエリを取得
 $query = $_GET['query'] ?? '';
@@ -55,7 +57,7 @@ if (!empty($query)) {
 								<p><?php echo htmlspecialchars($product['description']); ?></p>
 							</div>
 							<div class="card-action">
-								<a href="#">詳細を見る</a>
+								<a href="<?php echo htmlspecialchars($merchandise . '?id=' . $product['product_id']); ?>">詳細を見る</a>
 							</div>
 						</div>
 					</div>
