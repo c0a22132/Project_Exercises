@@ -1,5 +1,3 @@
-user_id INTEGER NOT NULL,
-
 <?php
 session_start();
 require 'database_config.php'; // データベース接続情報を含むファイル
@@ -8,8 +6,13 @@ require 'database_config.php'; // データベース接続情報を含むファ�
 $pdo = new PDO(DSN, DB_USER, DB_PASS);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+// データベースが存在しない場合に作成
+$pdo->exec("CREATE DATABASE IF NOT EXISTS my_database");
+$pdo->exec("USE my_database");
+
 // ユーザーテーブル作成
 $createUsersTable = "CREATE TABLE IF NOT EXISTS users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
     last_name VARCHAR(255) NOT NULL,
     first_name VARCHAR(255) NOT NULL,
     birthday DATE NOT NULL,
@@ -21,7 +24,8 @@ $pdo->exec($createUsersTable);
 
 // タグテーブル作成
 $createTagsTable = "CREATE TABLE IF NOT EXISTS tags (
-    tag_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    tag_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
     tag VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 )";
@@ -29,7 +33,8 @@ $pdo->exec($createTagsTable);
 
 // 指紋テーブル作成
 $createFingerprintsTable = "CREATE TABLE IF NOT EXISTS fingerprints (
-    fingerprint_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    fingerprint_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
     fingerprint VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 )";
@@ -37,7 +42,8 @@ $pdo->exec($createFingerprintsTable);
 
 // ユーザー確認テーブル作成
 $createUserVerificationTable = "CREATE TABLE IF NOT EXISTS user_verification (
-    verification_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    verification_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
     token VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
