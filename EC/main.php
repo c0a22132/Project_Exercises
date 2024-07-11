@@ -82,8 +82,18 @@
 		</div>
 	</main>
 	<footer class="page-footer">
-		<!-- Footer Content -->
-	</footer>
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Your Shopping Site</h5>
+                    <p class="grey-text text-lighten-4">ここにサイトの詳細情報を記載します。</p>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            &copy; 2022 Your Shopping Site. All rights reserved.
+        </div>
+    </footer>
 	<script>
 	document.addEventListener('DOMContentLoaded', function() {
 		var elems = document.querySelectorAll('.carousel');
