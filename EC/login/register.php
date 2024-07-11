@@ -1,4 +1,7 @@
 <?php
+//エラーを表示する
+ini_set('display_errors', "On");
+error_reporting(E_ALL);
 session_start();
 require '../login/database_config.php'; // データベース接続情報を含むファイル
 
@@ -11,68 +14,94 @@ $dbname = 'ecdatabase';
 $pdo->exec("CREATE DATABASE IF NOT EXISTS $dbname");
 $pdo->exec("USE $dbname");
 
-// 商品テーブル作成
-$createProductsTable = "CREATE TABLE IF NOT EXISTS products (
-    product_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    description TEXT NOT NULL,
-    stock INT NOT NULL,
-    image1 VARCHAR(255),
-    image2 VARCHAR(255),
-    image3 VARCHAR(255)
+// ユーザーテーブル作成
+$createUsersTable = "CREATE TABLE IF NOT EXISTS users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    last_name VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    birthday DATE NOT NULL,
+    address VARCHAR(255),
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL
 )";
-$pdo->exec($createProductsTable);
+$pdo->exec($createUsersTable);
 
 // タグテーブル作成
 $createTagsTable = "CREATE TABLE IF NOT EXISTS tags (
     tag_id INT AUTO_INCREMENT PRIMARY KEY,
-    product_id INT NOT NULL,
-    tag VARCHAR(255) NOT NULL,
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
+    user_id INT NOT NULL,
+    tag VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 )";
 $pdo->exec($createTagsTable);
 
+// 指紋テーブル作成
+$createFingerprintsTable = "CREATE TABLE IF NOT EXISTS fingerprints (
+    fingerprint_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    fingerprint VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+)";
+$pdo->exec($createFingerprintsTable);
+
+// ユーザー確認テーブル作成
+$createUserVerificationTable = "CREATE TABLE IF NOT EXISTS user_verification (
+    verification_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+)";
+$pdo->exec($createUserVerificationTable);
+
 // POSTデータを受け取る
-$name = $_POST['name'] ?? '';
-$price = $_POST['price'] ?? '';
-$description = $_POST['description'] ?? '';
-$stock = $_POST['stock'] ?? '';
-$tags = $_POST['tags'] ?? '';
-$image1 = $_FILES['image1']['name'] ?? '';
-$image2 = $_FILES['image2']['name'] ?? '';
-$image3 = $_FILES['image3']['name'] ?? '';
+$lastName = $_POST['last_name'] ?? '';
+$firstName = $_POST['first_name'] ?? '';
+$birthday = $_POST['birthday'] ?? '';
+$zipcode = $_POST['zipcode'] ?? '';
+$prefecture = $_POST['prefecture'] ?? '';
+$city = $_POST['city'] ?? '';
+$street = $_POST['street'] ?? '';
+$email = $_POST['email'] ?? '';
+$password = $_POST['password'] ?? '';
 
 // データ検証（簡易的な例）
-if (empty($name) || empty($price) || empty($description) || empty($stock)) {
+if (empty($lastName) || empty($firstName) || empty($email) || empty($password)) {
     // 必須フィールドが空の場合はエラー
     die('必須フィールドが入力されていません。');
 }
 
+// パスワードをハッシュ化
+$passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
 try {
     // SQL文を準備
-    $sql = "INSERT INTO products (name, price, description, stock, image1, image2, image3) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $address = $zipcode . ' ' . $prefecture . ' ' . $city . ' ' . $street;
+    $sql = "INSERT INTO users (last_name, first_name, birthday, address, email, password_hash) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($sql);
 
     // SQL文を実行
-    $stmt->execute([$name, $price, $description, $stock, $image1, $image2, $image3]);
+    $stmt->execute([$lastName, $firstName, $birthday, $address, $email, $passwordHash]);
 
-    // 商品登録後の処理
-    $productId = $pdo->lastInsertId(); // 最後に挿入された行のIDを取得
+    // ユーザー登録後の処理
+    $userId = $pdo->lastInsertId(); // 最後に挿入された行のIDを取得
 
-    // タグを登録
-    if (!empty($tags)) {
-        $tagsArray = explode(',', $tags);
-        foreach ($tagsArray as $tag) {
-            $tag = trim($tag);
-            $sqlTag = "INSERT INTO tags (product_id, tag) VALUES (?, ?)";
-            $stmtTag = $pdo->prepare($sqlTag);
-            $stmtTag->execute([$productId, $tag]);
-        }
-    }
+    // 確認メールを送信
+    $subject = 'アカウントの確認';
+    // 入力された情報の確認メールを送信
+    $message = "以下の情報で登録しました。\n\n";
+    $message .= "氏名: {$lastName} {$firstName}\n";
+    $message .= "メールアドレス: {$email}\n\n";
+
+    $headers = array(
+        'From' => 'test@test',
+        'Reply-To' => 'test@test',
+        'X-Mailer' => 'PHP/' . phpversion()
+    );
+    mail($email, $subject, $message, $headers);
 
     // 完了メッセージを変数に格納
-    $output = '商品が正常に登録されました。';
+    $output = '登録が完了しました。';
 } catch (PDOException $e) {
     die('データベースエラー: ' . $e->getMessage());
 }
@@ -82,12 +111,12 @@ try {
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <!--$outputに格納されたメッセージを表示-->
-    <title>商品登録</title>
+    <title>登録</title>
 </head>
 <body>
     <nav>
         <div class="nav-wrapper">
-            <a href="#" class="brand-logo center">商品登録完了</a>
+            <a href="#" class="brand-logo center">登録完了</a>
         </div>
     </nav>
     <div class="container">
