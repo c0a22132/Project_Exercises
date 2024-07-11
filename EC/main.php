@@ -36,6 +36,10 @@
 			<div class="row">
 				<?php
 				require './login/database_config.php';
+                //画像のアップロード先ディレクトリ
+                $uploadDir = './商品ページ例';
+                //商品ページ
+                $merchandise = './商品ページ例/merchandise.html';
 				$pdo = new PDO(DSN, DB_USER, DB_PASS);
 				$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$pdo->exec("USE ecdatabase");
@@ -45,14 +49,14 @@
 					echo '<div class="col s4">';
 					echo '<div class="card">';
 					echo '<div class="card-image">';
-					echo '<img src="' . $row['image1'] . '" alt="' . $row['name'] . '">';
+                    echo '<img src="' . $uploadDir . '/' . $row['image1'] . '" alt="' . $row['name'] . '">';
 					echo '</div>';
 					echo '<span class="card-title">' . $row['name'] . '</span>';
 					echo '<div class="card-content">';
 					echo $row['description'];
 					echo '</div>';
 					echo '<div class="card-action">';
-					echo '<a href="#">More Info</a>';
+					echo '<a href="' . $merchandise . '?id=' . $row['product_id'] . '">詳細を見る</a>';
 					echo '</div>';
 					echo '</div>';
 					echo '</div>';
