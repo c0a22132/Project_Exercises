@@ -32,24 +32,40 @@
 				</div>
 				<button type="submit" class="waves-effect waves-light btn">検索</button>
 			</form>
+			<!-- Recommendation Carousel -->
+			<div class="carousel carousel-slider center">
+				<div class="carousel-item red white-text" href="#one!">
+					<h2>1</h2>
+					<p class="white-text">カーセル1</p>
+				</div>
+				<div class="carousel-item amber white-text" href="#two!">
+					<h2>2</h2>
+					<p class="white-text">カーセル2</p>
+				</div>
+				<div class="carousel-item green white-text" href="#three!">
+					<h2>3</h2>
+					<p class="white-text">カーセル3</p>
+				</div>
+				<div class="carousel-item blue white-text" href="#four!">
+					<h2>4</h2>
+					<p class="white-text">カーセル4</p>
+				</div>
+			</div>
 			<!-- Products Display -->
 			<div class="row">
 				<?php
 				require './login/database_config.php';
-                //画像のアップロード先ディレクトリ
-                $uploadDir = './商品ページ例';
-                //商品ページ
-                $merchandise = './商品ページ例/merchandise.html';
+				$uploadDir = './商品ページ例';
+				$merchandise = './商品ページ例/merchandise.html';
 				$pdo = new PDO(DSN, DB_USER, DB_PASS);
 				$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$pdo->exec("USE ecdatabase");
-
 				$stmt = $pdo->query("SELECT * FROM products");
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 					echo '<div class="col s4">';
 					echo '<div class="card">';
 					echo '<div class="card-image">';
-                    echo '<img src="' . $uploadDir . '/' . $row['image1'] . '" alt="' . $row['name'] . '">';
+					echo '<img src="' . $uploadDir . '/' . $row['image1'] . '" alt="' . $row['name'] . '">';
 					echo '</div>';
 					echo '<span class="card-title">' . $row['name'] . '</span>';
 					echo '<div class="card-content">';
@@ -65,10 +81,22 @@
 			</div>
 		</div>
 	</main>
-	
 	<footer class="page-footer">
 		<!-- Footer Content -->
 	</footer>
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		var elems = document.querySelectorAll('.carousel');
+		var instances = M.Carousel.init(elems, {
+			fullWidth: true,
+			indicators: true
+		});
+		setInterval(function() {
+			var instance = M.Carousel.getInstance(elems[0]);
+			instance.next();
+		}, 5000);
+	});
+	</script>
 
 	<!-- Materialize JS -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
