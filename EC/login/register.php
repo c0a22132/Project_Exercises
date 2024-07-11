@@ -7,7 +7,8 @@ $pdo = new PDO(DSN, DB_USER, DB_PASS);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // データベースが存在しない場合に作成し、そのデータベースを使用
-$dbname = 'my_database';
+// データベース名はdatabase_config.phpから取得
+$dbname = "ecdatabase"
 $pdo->exec("CREATE DATABASE IF NOT EXISTS $dbname");
 $pdo->exec("USE $dbname");
 
