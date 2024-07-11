@@ -1,4 +1,8 @@
 <?php
+//エラーを表示する
+ini_set('display_errors', "On");
+error_reporting(E_ALL);
+
 session_start();
 require 'database_config.php'; // データベース接続情報を含むファイル
 
