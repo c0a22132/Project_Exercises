@@ -10,6 +10,9 @@ require './login/database_config.php';
 $pdo = new PDO(DSN, DB_USER, DB_PASS);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+//画像のアップロード先ディレクトリ
+$uploadDir = './商品ページ例';
+
 // 検索クエリを取得
 $query = $_GET['query'] ?? '';
 
@@ -45,7 +48,7 @@ if (!empty($query)) {
 					<div class="col s12 m4">
 						<div class="card">
 							<div class="card-image">
-								<img src="<?php echo htmlspecialchars($product['image1']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+								<img src="<?php echo htmlspecialchars($uploadDir $product['image1']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
 							</div>
 							<span class="card-title"><?php echo htmlspecialchars($product['name']); ?></span>
 							<div class="card-content">
