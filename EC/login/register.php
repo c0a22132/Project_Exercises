@@ -1,5 +1,5 @@
 <?php
-//errorを表示
+//エラーを表示する
 ini_set('display_errors', "On");
 error_reporting(E_ALL);
 session_start();
@@ -14,67 +14,67 @@ $dbname = 'ecdatabase';
 $pdo->exec("CREATE DATABASE IF NOT EXISTS $dbname");
 $pdo->exec("USE $dbname");
 
-// ユーザーテーブル作成
-$createUsersTable = "CREATE TABLE IF NOT EXISTS users (
-    user_id INT AUTO_INCREMENT PRIMARY KEY,
-    last_name VARCHAR(255) NOT NULL,
-    first_name VARCHAR(255) NOT NULL,
-    birthday DATE NOT NULL,
-    address VARCHAR(255),
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL
-)";
-$pdo->exec($createUsersTable);
-
-// usertagsテーブル作成
-$createUserTagsTable = "CREATE TABLE IF NOT EXISTS usertags (
-    tag_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    tag VARCHAR(255),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-)";
-$pdo->exec($createUserTagsTable);
-
-// 指紋テーブル作成
-$createFingerprintsTable = "CREATE TABLE IF NOT EXISTS fingerprints (
-    fingerprint_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    fingerprint VARCHAR(255),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-)";
-$pdo->exec($createFingerprintsTable);
-
-// ユーザー確認テーブル作成
-$createUserVerificationTable = "CREATE TABLE IF NOT EXISTS user_verification (
-    verification_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    token VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-)";
-$pdo->exec($createUserVerificationTable);
-
-// POSTデータを受け取る
-$lastName = $_POST['last_name'] ?? '';
-$firstName = $_POST['first_name'] ?? '';
-$birthday = $_POST['birthday'] ?? '';
-$zipcode = $_POST['zipcode'] ?? '';
-$prefecture = $_POST['prefecture'] ?? '';
-$city = $_POST['city'] ?? '';
-$street = $_POST['street'] ?? '';
-$email = $_POST['email'] ?? '';
-$password = $_POST['password'] ?? '';
-
-// データ検証（簡易的な例）
-if (empty($lastName) || empty($firstName) || empty($email) || empty($password)) {
-    // 必須フィールドが空の場合はエラー
-    die('必須フィールドが入力されていません。');
-}
-
-// パスワードをハッシュ化
-$passwordHash = password_hash($password, PASSWORD_DEFAULT);
-
 try {
+    // ユーザーテーブル作成
+    $createUsersTable = "CREATE TABLE IF NOT EXISTS users (
+        user_id INT AUTO_INCREMENT PRIMARY KEY,
+        last_name VARCHAR(255) NOT NULL,
+        first_name VARCHAR(255) NOT NULL,
+        birthday DATE NOT NULL,
+        address VARCHAR(255),
+        email VARCHAR(255) NOT NULL UNIQUE,
+        password_hash VARCHAR(255) NOT NULL
+    )";
+    $pdo->exec($createUsersTable);
+
+    // usertagsテーブル作成
+    $createUserTagsTable = "CREATE TABLE IF NOT EXISTS usertags (
+        tag_id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        tag VARCHAR(255),
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    )";
+    $pdo->exec($createUserTagsTable);
+
+    // 指紋テーブル作成
+    $createFingerprintsTable = "CREATE TABLE IF NOT EXISTS fingerprints (
+        fingerprint_id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        fingerprint VARCHAR(255),
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    )";
+    $pdo->exec($createFingerprintsTable);
+
+    // ユーザー確認テーブル作成
+    $createUserVerificationTable = "CREATE TABLE IF NOT EXISTS user_verification (
+        verification_id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        token VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    )";
+    $pdo->exec($createUserVerificationTable);
+
+    // POSTデータを受け取る
+    $lastName = $_POST['last_name'] ?? '';
+    $firstName = $_POST['first_name'] ?? '';
+    $birthday = $_POST['birthday'] ?? '';
+    $zipcode = $_POST['zipcode'] ?? '';
+    $prefecture = $_POST['prefecture'] ?? '';
+    $city = $_POST['city'] ?? '';
+    $street = $_POST['street'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    // データ検証（簡易的な例）
+    if (empty($lastName) || empty($firstName) || empty($email) || empty($password)) {
+        // 必須フィールドが空の場合はエラー
+        die('必須フィールドが入力されていません。');
+    }
+
+    // パスワードをハッシュ化
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
     // SQL文を準備
     $address = $zipcode . ' ' . $prefecture . ' ' . $city . ' ' . $street;
     $sql = "INSERT INTO users (last_name, first_name, birthday, address, email, password_hash) VALUES (?, ?, ?, ?, ?, ?)";
