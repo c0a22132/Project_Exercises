@@ -12,6 +12,7 @@ $city = $_POST['city'] ?? '';
 $street = $_POST['street'] ?? '';
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
+$fingerprint = $_POST['fingerprint'] ?? '';
 
 // データ検証（簡易的な例）
 if (empty($lastName) || empty($firstName) || empty($email) || empty($password)) {
@@ -29,11 +30,11 @@ try {
 
     // SQL文を準備
     $address = $zipcode . ' ' . $prefecture . ' ' . $city . ' ' . $street;
-    $sql = "INSERT INTO users (last_name, first_name, birthday, address, email, password_hash) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO users (last_name, first_name, birthday, address, email, password_hash, fingerprint) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($sql);
 
     // SQL文を実行
-    $stmt->execute([$lastName, $firstName, $birthday, $address, $email, $passwordHash]);
+    $stmt->execute([$lastName, $firstName, $birthday, $address, $email, $passwordHash, $fingerprint]);
 
     // ユーザー登録後の処理
     $userId = $pdo->lastInsertId(); // 最後に挿入された行のIDを取得

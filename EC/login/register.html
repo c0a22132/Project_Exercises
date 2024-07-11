@@ -7,9 +7,24 @@
     <!-- Materialize CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- FingerprintJSのスクリプトを追加 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
     <!-- AjaxZip3 JavaScript -->
     <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+                Fingerprint2.get(function (components) {
+                    var values = components.map(function (component) { return component.value });
+                    var murmur = Fingerprint2.x64hash128(values.join(''), 31);
+                    var input = document.createElement("input");
+                    input.setAttribute("type", "hidden");
+                    input.setAttribute("name", "fingerprint");
+                    input.setAttribute("value", murmur);
+                    document.querySelector("form").appendChild(input);
+                });
+            }, 500);
+        });
     // 郵便番号から住所自動入力
         function populateAddress() {
             // AjaxZip3のライブラリを使って郵便番号から住所を取得
