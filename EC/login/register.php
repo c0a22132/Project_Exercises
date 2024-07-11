@@ -35,7 +35,7 @@ try {
         FOREIGN KEY (user_id) REFERENCES users(user_id)
     )";
     $pdo->exec($createUserTagsTable);
-
+    
     // 指紋テーブル作成
     $createFingerprintsTable = "CREATE TABLE IF NOT EXISTS fingerprints (
         fingerprint_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -44,7 +44,7 @@ try {
         FOREIGN KEY (user_id) REFERENCES users(user_id)
     )";
     $pdo->exec($createFingerprintsTable);
-
+    
     // ユーザー確認テーブル作成
     $createUserVerificationTable = "CREATE TABLE IF NOT EXISTS user_verification (
         verification_id INT AUTO_INCREMENT PRIMARY KEY,
