@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'database_config.php'; // データベース接続情報を含むファイル
+require '../login/database_config.php'; // データベース接続情報を含むファイル
 
 // データベース接続
 $pdo = new PDO(DSN, DB_USER, DB_PASS);
