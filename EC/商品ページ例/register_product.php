@@ -25,7 +25,7 @@ $createProductsTable = "CREATE TABLE IF NOT EXISTS products (
 $pdo->exec($createProductsTable);
 
 // タグテーブル作成
-$createTagsTable = "CREATE TABLE IF NOT EXISTS tags (
+$createTagsTable = "CREATE TABLE IF NOT EXISTS products_tags (
     tag_id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
     tag VARCHAR(255) NOT NULL,
@@ -65,7 +65,7 @@ try {
         $tagsArray = explode(',', $tags);
         foreach ($tagsArray as $tag) {
             $tag = trim($tag);
-            $sqlTag = "INSERT INTO tags (product_id, tag) VALUES (?, ?)";
+            $sqlTag = "INSERT INTO products_tags (product_id, tag) VALUES (?, ?)";
             $stmtTag = $pdo->prepare($sqlTag);
             $stmtTag->execute([$productId, $tag]);
         }
