@@ -31,7 +31,7 @@ try {
         tag_id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT NOT NULL,
         tag VARCHAR(255),
-        FOREIGN KEY (user_id) REFERENCES users(user_id)
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
     )";
     $pdo->exec($createUserTagsTable);
 
