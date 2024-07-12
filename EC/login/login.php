@@ -24,12 +24,18 @@ try {
     if ($user && password_verify($password, $user['password_hash'])) {
         // ログイン成功
         $_SESSION['user_id'] = $user['id'];
+        
+        // セッションIDを取得
+        $session_id = session_id();
+        
+        // user_sessions テーブルにセッションIDを保存
+        $insertSessionSql = "INSERT INTO user_sessions (user_id, session_id) VALUES (:user_id, :session_id)";
+        $stmt = $pdo->prepare($insertSessionSql);
+        $stmt->execute([':user_id' => $user['id'], ':session_id' => $session_id]);
+        
         header('Location: ../index.html'); // メインページへリダイレクト
         exit;
     } else {
         die('ログイン情報が正しくありません。');
     }
-} catch (PDOException $e) {
-    die('データベースエラー: ' . $e->getMessage());
-}
 ?>
