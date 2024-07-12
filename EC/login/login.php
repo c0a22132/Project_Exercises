@@ -17,11 +17,12 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // ユーザー入力を直接SQLクエリに挿入
-    $sql = "SELECT * FROM user_verification WHERE email = '$email'";
-    $stmt = $pdo->query($sql);
+    $sql = "SELECT * FROM users WHERE email = :email";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['email' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($password, $user['password_hash'])) {
+    if ($user && users($password, $user['password_hash'])) {
         // ログイン成功
         $_SESSION['user_id'] = $user['id'];
         header('Location: ../index.html'); // メインページへリダイレクト
