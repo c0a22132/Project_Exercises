@@ -44,15 +44,13 @@ $createFingerprintsTable = "CREATE TABLE IF NOT EXISTS fingerprints (
 )";
 $pdo->exec($createFingerprintsTable);
 
-// ユーザー確認テーブル作成
-$createUserVerificationTable = "CREATE TABLE IF NOT EXISTS user_verification (
-    verification_id INT AUTO_INCREMENT PRIMARY KEY,
+// ユーザセッションID保存テーブル作成
+$createUserSessionsTable = "CREATE TABLE IF NOT EXISTS user_sessions (
+    user_session_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    token VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    session_id VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 )";
-$pdo->exec($createUserVerificationTable);
 
 // POSTデータを受け取る
 $lastName = $_POST['last_name'] ?? '';
