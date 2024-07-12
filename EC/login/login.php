@@ -17,7 +17,7 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // ユーザー入力を直接SQLクエリに挿入
-    $sql = "SELECT * FROM user WHERE email = '$email'";
+    $sql = "SELECT * FROM users WHERE email = '$email'";
     $stmt = $pdo->query($sql);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
