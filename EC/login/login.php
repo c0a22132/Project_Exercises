@@ -16,26 +16,33 @@ try {
     $pdo = new PDO(DSN, DB_USER, DB_PASS);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // ユーザー入力を直接SQLクエリに挿入
-    $sql = "SELECT * FROM users WHERE email = '$email'";
-    $stmt = $pdo->query($sql);
+    // プリペアドステートメントを使用してSQLインジェクションを防ぐ
+    $sql = "SELECT * FROM users WHERE email = :email";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['password_hash'])) {
         // ログイン成功
-        $_SESSION['user_id'] = $user['id'];
-        
-        // セッションIDを取得
+        $_SESSION['user_id'] = $user['user_id'];
+
+        // セッションIDを生成
         $session_id = session_id();
-        
-        // user_sessions テーブルにセッションIDを保存
-        $insertSessionSql = "INSERT INTO user_sessions (user_id, session_id) VALUES (:user_id, :session_id)";
-        $stmt = $pdo->prepare($insertSessionSql);
-        $stmt->execute([':user_id' => $user['id'], ':session_id' => $session_id]);
-        
+
+        // user_sessionsテーブルにセッションIDを保存
+        $insert_sql = "INSERT INTO user_sessions (user_id, session_id) VALUES (:user_id, :session_id)";
+        $insert_stmt = $pdo->prepare($insert_sql);
+        $insert_stmt->bindParam(':user_id', $user['user_id'], PDO::PARAM_INT);
+        $insert_stmt->bindParam(':session_id', $session_id, PDO::PARAM_STR);
+        $insert_stmt->execute();
+
         header('Location: ../index.html'); // メインページへリダイレクト
         exit;
     } else {
         die('ログイン情報が正しくありません。');
     }
+} catch (PDOException $e) {
+    die('データベースエラー: ' . $e->getMessage());
+}
 ?>
