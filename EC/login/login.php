@@ -1,4 +1,7 @@
 <?php
+//エラーを表示
+ini_set('display_errors', "On");
+error_reporting(E_ALL);
 session_start();
 require 'database_config.php'; // データベース接続情報を含むファイル
 
@@ -14,7 +17,7 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // ユーザー入力を直接SQLクエリに挿入
-    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $sql = "SELECT * FROM user_verification WHERE email = '$email'";
     $stmt = $pdo->query($sql);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
