@@ -15,7 +15,7 @@
 │   └── ... (その他の画像ファイル)
 └── ... (その他のページ)
 
-データベース名はecdatabese
+データベース名はecdatabase
 
 CREATE TABLE users (
     user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
